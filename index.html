@@ -457,7 +457,21 @@ function createDefaultUser(nickname) {
 }
 
 function migrateOldData(userId) {
-  const userData = getUserData(userId);
+  let userData = getUserData(userId);
+  // 如果用户数据不存在（新用户），创建默认数据对象
+  if (!userData) {
+    userData = {
+      points: 0,
+      level: '童生',
+      badges: [],
+      learnedIds: [],
+      todayCount: 0,
+      todayDate: '',
+      lastStudyDate: '',
+      streakDays: 0,
+      stats: { challenges: 0, bestScore: 0, totalStars: 0 }
+    };
+  }
   userData.points = parseInt(localStorage.getItem('gushici_points') || '0');
   userData.level = localStorage.getItem('gushici_level') || '童生';
   userData.badges = JSON.parse(localStorage.getItem('gushici_badges') || '[]');
@@ -576,9 +590,24 @@ function loadUserState(userId) {
       saveUserData(userId, defaultData);
       loadUserState(userId);
       return;
+    } else {
+      // 用户不存在，清除无效的 currentUserId
+      console.error('用户不存在：' + userId);
+      localStorage.removeItem('gushici_current_user');
+      // 清空 state 为用户默认状态
+      state.userPoints = 0;
+      state.userLevel = '童生';
+      state.badges = [];
+      state.learnedIds = [];
+      state.todayCount = 0;
+      state.todayDate = '';
+      state.lastStudyDate = '';
+      state.streakDays = 0;
+      state.stats = { challenges: 0, bestScore: 0, totalStars: 0 };
+      return;  // 重要：添加 return 避免继续执行
     }
   }
-  
+
   // 更新state
   state.userPoints = userData.points || 0;
   state.userLevel = userData.level || '童生';
