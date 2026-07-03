@@ -105,7 +105,7 @@ body{font-family:-apple-system,"Segoe UI",sans-serif;background:#F5F0E8;color:#3
 
 /* 个人中心 */
 .profile-header{background:linear-gradient(135deg,#8B4513,#A0522D);padding:32px 16px 24px;text-align:center;color:#fff;border-radius:0 0 20px 20px}
-.profile-avatar{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 12px}
+.profile-avatar{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:32px;margin:0 auto 12px;cursor:pointer}
 .profile-level{font-size:20px;font-weight:700}
 .profile-points{font-size:14px;opacity:0.85;margin-top:4px}
 .profile-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:#e0e0e0;margin:16px;border-radius:12px;overflow:hidden}
@@ -151,6 +151,47 @@ body{font-family:-apple-system,"Segoe UI",sans-serif;background:#F5F0E8;color:#3
 .btn-start{background:linear-gradient(135deg,#8B4513,#A0522D);color:#fff}
 .btn-start:active{transform:scale(0.98)}
 
+/* ===== 用户选择页样式 ===== */
+.user-select-header{background:linear-gradient(135deg,#8B4513,#A0522D);color:#fff;text-align:center;padding:48px 16px 32px;border-radius:0 0 30px 30px}
+.user-select-header h1{font-size:28px;margin:0;letter-spacing:3px}
+.user-select-header p{font-size:14px;opacity:0.85;margin-top:8px}
+.user-list{padding:24px 16px;flex:1;overflow-y:auto}
+.user-list-title{font-size:16px;color:#666;margin-bottom:16px;text-align:center}
+.user-card{background:#fff;border-radius:16px;padding:20px;margin-bottom:12px;display:flex;align-items:center;box-shadow:0 2px 12px rgba(0,0,0,0.08);cursor:pointer;transition:transform 0.15s}
+.user-card:active{transform:scale(0.97)}
+.user-card-avatar{width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,#8B4513,#D2691E);display:flex;align-items:center;justify-content:center;font-size:32px;margin-right:16px;flex:none}
+.user-card-info{flex:1}
+.user-card-name{font-size:18px;font-weight:600;color:#333}
+.user-card-stats{font-size:13px;color:#999;margin-top:4px}
+.user-card-points{font-size:14px;color:#8B4513;font-weight:500;margin-top:2px}
+.user-card-arrow{font-size:20px;color:#ccc;flex:none}
+.add-user-card{background:#fff;border-radius:16px;padding:20px;margin-bottom:12px;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 12px rgba(0,0,0,0.08);cursor:pointer;border:2px dashed #ddd;transition:all 0.15s}
+.add-user-card:active{transform:scale(0.97);border-color:#8B4513}
+.add-user-icon{width:56px;height:56px;border-radius:50%;background:#f5f5f5;display:flex;align-items:center;justify-content:center;font-size:32px;margin-right:16px;flex:none;color:#999}
+.add-user-text{font-size:16px;color:#999;font-weight:500}
+
+/* 用户创建弹窗 */
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:100;animation:fadeIn 0.2s ease}
+.modal-content{background:#fff;border-radius:20px;padding:32px 24px;width:90%;max-width:360px;animation:slideUp 0.3s ease}
+@keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}
+.modal-title{font-size:20px;font-weight:600;color:#333;text-align:center;margin-bottom:24px}
+.modal-input{padding:14px 16px;border:1.5px solid #e0e0e0;border-radius:12px;font-size:16px;width:100%;outline:none;transition:border-color 0.2s;margin-bottom:16px}
+.modal-input:focus{border-color:#8B4513}
+.modal-hint{font-size:13px;color:#999;margin-bottom:20px;text-align:center}
+.modal-avatar-select{display:flex;gap:12px;justify-content:center;margin-bottom:24px;flex-wrap:wrap}
+.avatar-option{width:48px;height:48px;border-radius:50%;background:#f5f5f5;display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer;border:3px solid transparent;transition:all 0.15s}
+.avatar-option.selected{border-color:#8B4513;background:#fdf6ee}
+.modal-actions{display:flex;gap:12px}
+.modal-btn{flex:1;padding:14px;border-radius:12px;font-size:15px;font-weight:600;cursor:pointer;border:none;transition:all 0.15s}
+.modal-btn-cancel{background:#f5f5f5;color:#666}
+.modal-btn-cancel:active{background:#e0e0e0}
+.modal-btn-confirm{background:linear-gradient(135deg,#8B4513,#A0522D);color:#fff}
+.modal-btn-confirm:active{transform:scale(0.98)}
+
+/* 切换用户按钮 */
+.switch-user-btn{position:absolute;right:12px;top:50%;transform:translateY(-50%);background:rgba(255,255,255,0.2);border:none;color:#fff;font-size:12px;padding:6px 12px;border-radius:20px;cursor:pointer;display:flex;align-items:center;gap:4px}
+.switch-user-btn:active{background:rgba(255,255,255,0.3)}
+
 /* 动画 */
 @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
 .fade-in{animation:fadeIn 0.4s ease}
@@ -165,9 +206,29 @@ body{font-family:-apple-system,"Segoe UI",sans-serif;background:#F5F0E8;color:#3
 <body>
 <div class="app" id="app">
 
+  <!-- ========== 用户选择页 ========== -->
+  <div class="page" id="page-user-select">
+    <div class="user-select-header">
+      <h1>古诗词学习</h1>
+      <p>游戏化闯关 · 轻松记经典</p>
+    </div>
+    <div class="user-list">
+      <div class="user-list-title">选择您的学习账号</div>
+      <div id="user-list-container"></div>
+      <div class="add-user-card" onclick="showCreateUserModal()">
+        <div class="add-user-icon">+</div>
+        <div class="add-user-text">添加新用户</div>
+      </div>
+    </div>
+  </div>
+
   <!-- ========== 首页 ========== -->
-  <div class="page active" id="page-home">
+  <div class="page" id="page-home">
     <div class="home-header">
+      <button class="switch-user-btn" onclick="goUserSelect()">
+        <span id="current-user-avatar">📚</span>
+        <span id="current-user-name">切换</span>
+      </button>
       <h1>古诗词学习</h1>
       <p>游戏化闯关 · 轻松记经典</p>
       <!-- 总进度环 -->
@@ -245,7 +306,7 @@ body{font-family:-apple-system,"Segoe UI",sans-serif;background:#F5F0E8;color:#3
   <!-- ========== 个人中心 ========== -->
   <div class="page" id="page-profile">
     <div class="profile-header">
-      <div class="profile-avatar">📚</div>
+      <div class="profile-avatar" id="profile-avatar">📚</div>
       <div class="profile-level" id="p-level">童生</div>
       <div class="profile-points" id="p-points">0 积分</div>
     </div>
@@ -259,7 +320,8 @@ body{font-family:-apple-system,"Segoe UI",sans-serif;background:#F5F0E8;color:#3
       <div class="badge-grid" id="badge-grid"></div>
     </div>
     <div class="profile-actions">
-      <button class="btn" onclick="resetAllData()">🔄 重置学习数据</button>
+      <button class="btn" onclick="goUserSelect()">🔄 切换用户</button>
+      <button class="btn" onclick="resetAllData()">🗑️ 重置学习数据</button>
       <button class="btn" onclick="goHome()">🏠 返回首页</button>
     </div>
   </div>
@@ -275,7 +337,371 @@ body{font-family:-apple-system,"Segoe UI",sans-serif;background:#F5F0E8;color:#3
   </nav>
 </div>
 
+<!-- 用户创建弹窗 -->
+<div class="modal-overlay hidden" id="create-user-modal">
+  <div class="modal-content">
+    <div class="modal-title">创建新用户</div>
+    <input type="text" class="modal-input" id="user-nickname-input" placeholder="请输入昵称" maxlength="10">
+    <div class="modal-hint">选择一个头像</div>
+    <div class="modal-avatar-select" id="avatar-select"></div>
+    <div class="modal-actions">
+      <button class="modal-btn modal-btn-cancel" onclick="hideCreateUserModal()">取消</button>
+      <button class="modal-btn modal-btn-confirm" onclick="createUser()">创建</button>
+    </div>
+  </div>
+</div>
+
 <script>
+// =====================================================================
+//  多用户管理系统
+// =====================================================================
+const AVATAR_OPTIONS = ['🧑💼', '👧', '👦', '👩', '🧓', '👴', '👩🦰', '👨🦱', '🧑🎓', '👩🏫'];
+
+// 用户管理相关函数
+function loadUsers() {
+  const data = localStorage.getItem('gushici_users');
+  return data ? JSON.parse(data) : null;
+}
+
+function saveUsers(users) {
+  localStorage.setItem('gushici_users', JSON.stringify(users));
+}
+
+function getcurrentUserId() {
+  return localStorage.getItem('gushici_current_user');
+}
+
+function setCurrentUserId(userId) {
+  localStorage.setItem('gushici_current_user', userId);
+}
+
+function initializeUsers() {
+  let usersData = loadUsers();
+  
+  // 如果没有用户数据，检查是否需要迁移旧数据
+  if (!usersData) {
+    usersData = {
+      currentUserId: null,
+      users: {},
+      userOrder: []
+    };
+    
+    // 检查是否有旧数据需要迁移
+    const oldPoints = localStorage.getItem('gushici_points');
+    const oldLearned = localStorage.getItem('gushici_learned');
+    
+    if (oldPoints !== null || oldLearned !== null) {
+      // 创建默认用户并迁移数据
+      const defaultUser = createDefaultUser('默认用户');
+      usersData.users[defaultUser.id] = defaultUser;
+      usersData.userOrder.push(defaultUser.id);
+      usersData.currentUserId = defaultUser.id;
+      
+      // 迁移旧数据
+      migrateOldData(defaultUser.id);
+    }
+    
+    saveUsers(usersData);
+  }
+  
+  return usersData;
+}
+
+function createDefaultUser(nickname) {
+  const userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+  return {
+    id: userId,
+    nickname: nickname,
+    avatar: AVATAR_OPTIONS[0],
+    createdAt: new Date().toISOString(),
+    points: 0,
+    level: '童生',
+    badges: [],
+    learnedIds: [],
+    todayCount: 0,
+    todayDate: '',
+    lastStudyDate: '',
+    streakDays: 0,
+    stats: { challenges: 0, bestScore: 0, totalStars: 0 }
+  };
+}
+
+function migrateOldData(userId) {
+  const userData = getUserData(userId);
+  userData.points = parseInt(localStorage.getItem('gushici_points') || '0');
+  userData.level = localStorage.getItem('gushici_level') || '童生';
+  userData.badges = JSON.parse(localStorage.getItem('gushici_badges') || '[]');
+  userData.learnedIds = JSON.parse(localStorage.getItem('gushici_learned') || '[]');
+  userData.todayCount = parseInt(localStorage.getItem('gushici_today') || '0');
+  userData.todayDate = localStorage.getItem('gushici_today_date') || '';
+  userData.lastStudyDate = localStorage.getItem('gushici_last_study_date') || '';
+  userData.streakDays = parseInt(localStorage.getItem('gushici_streak_days') || '0');
+  userData.stats = JSON.parse(localStorage.getItem('gushici_stats') || '{"challenges":0,"bestScore":0,"totalStars":0}');
+  saveUserData(userId, userData);
+}
+
+function getUserData(userId) {
+  const key = 'gushici_userdata_' + userId;
+  const data = localStorage.getItem(key);
+  return data ? JSON.parse(data) : null;
+}
+
+function saveUserData(userId, userData) {
+  const key = 'gushici_userdata_' + userId;
+  localStorage.setItem(key, JSON.stringify(userData));
+}
+
+function addUser(nickname, avatar) {
+  const usersData = loadUsers();
+  const userId = 'user_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+  
+  const newUser = {
+    id: userId,
+    nickname: nickname,
+    avatar: avatar,
+    createdAt: new Date().toISOString(),
+    points: 0,
+    level: '童生',
+    badges: [],
+    learnedIds: [],
+    todayCount: 0,
+    todayDate: '',
+    lastStudyDate: '',
+    streakDays: 0,
+    stats: { challenges: 0, bestScore: 0, totalStars: 0 }
+  };
+  
+  usersData.users[userId] = newUser;
+  usersData.userOrder.push(userId);
+  
+  // 如果是第一个用户，自动设为当前用户
+  if (usersData.userOrder.length === 1) {
+    usersData.currentUserId = userId;
+  }
+  
+  saveUsers(usersData);
+  return userId;
+}
+
+function switchUser(userId) {
+  // 新增：先保存当前用户数据
+  const currentUserId = getcurrentUserId();
+  if (currentUserId) {
+    saveUserState(currentUserId);
+  }
+  
+  const usersData = loadUsers();
+  usersData.currentUserId = userId;
+  saveUsers(usersData);
+  setCurrentUserId(userId);
+  
+  // 加载用户数据到state
+  loadUserState(userId);
+}
+
+function deleteUser(userId) {
+  const usersData = loadUsers();
+  
+  // 不能删除最后一个用户
+  if (usersData.userOrder.length <= 1) {
+    alert('不能删除最后一个用户！');
+    return false;
+  }
+  
+  delete usersData.users[userId];
+  usersData.userOrder = usersData.userOrder.filter(id => id !== userId);
+  
+  // 如果删除的是当前用户，切换到第一个用户
+  if (usersData.currentUserId === userId) {
+    usersData.currentUserId = usersData.userOrder[0];
+    setCurrentUserId(usersData.userOrder[0]);
+  }
+  
+  saveUsers(usersData);
+  
+  // 删除用户数据
+  localStorage.removeItem('gushici_userdata_' + userId);
+  
+  return true;
+}
+
+function loadUserState(userId) {
+  const userData = getUserData(userId);
+  if (!userData) {
+    // 如果用户数据不存在，创建默认数据
+    const usersData = loadUsers();
+    const user = usersData.users[userId];
+    if (user) {
+      const defaultData = {
+        points: 0,
+        level: '童生',
+        badges: [],
+        learnedIds: [],
+        todayCount: 0,
+        todayDate: '',
+        lastStudyDate: '',
+        streakDays: 0,
+        stats: { challenges: 0, bestScore: 0, totalStars: 0 }
+      };
+      saveUserData(userId, defaultData);
+      loadUserState(userId);
+      return;
+    }
+  }
+  
+  // 更新state
+  state.userPoints = userData.points || 0;
+  state.userLevel = userData.level || '童生';
+  state.badges = userData.badges || [];
+  state.learnedIds = userData.learnedIds || [];
+  state.todayCount = userData.todayCount || 0;
+  state.todayDate = userData.todayDate || '';
+  state.lastStudyDate = userData.lastStudyDate || '';
+  state.streakDays = userData.streakDays || 0;
+  state.stats = userData.stats || { challenges: 0, bestScore: 0, totalStars: 0 };
+}
+
+function saveUserState(userId) {
+  const userData = {
+    points: state.userPoints,
+    level: state.userLevel,
+    badges: state.badges,
+    learnedIds: state.learnedIds,
+    todayCount: state.todayCount,
+    todayDate: state.todayDate,
+    lastStudyDate: state.lastStudyDate,
+    streakDays: state.streakDays,
+    stats: state.stats
+  };
+  saveUserData(userId, userData);
+}
+
+// =====================================================================
+//  用户选择页相关函数
+// =====================================================================
+function renderUserSelectPage() {
+  const usersData = loadUsers();
+  const container = document.getElementById('user-list-container');
+  if (!container) return;
+  
+  container.innerHTML = '';
+  
+  usersData.userOrder.forEach(userId => {
+    const user = usersData.users[userId];
+    if (!user) return;
+    
+    const card = document.createElement('div');
+    card.className = 'user-card';
+    card.onclick = () => selectUser(userId);
+    card.innerHTML = `
+      <div class="user-card-avatar">${user.avatar}</div>
+      <div class="user-card-info">
+        <div class="user-card-name">${user.nickname}</div>
+        <div class="user-card-stats">闯关 ${user.stats ? user.stats.challenges : 0} 次</div>
+        <div class="user-card-points">${user.points || 0} 积分 · ${user.level || '童生'}</div>
+      </div>
+      <div class="user-card-arrow">→</div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function selectUser(userId) {
+  switchUser(userId);
+  showPage('home');
+  goHome();
+}
+
+function goUserSelect() {
+  renderUserSelectPage();
+  showPage('user-select');
+}
+
+function showCreateUserModal() {
+  const modal = document.getElementById('create-user-modal');
+  const input = document.getElementById('user-nickname-input');
+  const avatarSelect = document.getElementById('avatar-select');
+  
+  if (modal) modal.classList.remove('hidden');
+  if (input) {
+    input.value = '';
+    input.focus();
+  }
+  
+  // 渲染头像选择
+  if (avatarSelect) {
+    avatarSelect.innerHTML = '';
+    AVATAR_OPTIONS.forEach((avatar, idx) => {
+      const opt = document.createElement('div');
+      opt.className = 'avatar-option' + (idx === 0 ? ' selected' : '');
+      opt.textContent = avatar;
+      opt.dataset.avatar = avatar;
+      opt.onclick = () => selectAvatar(avatar, opt);
+      avatarSelect.appendChild(opt);
+    });
+  }
+  
+  selectedAvatar = AVATAR_OPTIONS[0];
+}
+
+function hideCreateUserModal() {
+  const modal = document.getElementById('create-user-modal');
+  if (modal) modal.classList.add('hidden');
+}
+
+let selectedAvatar = AVATAR_OPTIONS[0];
+
+function selectAvatar(avatar, element) {
+  selectedAvatar = avatar;
+  document.querySelectorAll('.avatar-option').forEach(el => el.classList.remove('selected'));
+  if (element) element.classList.add('selected');
+}
+
+function createUser() {
+  const input = document.getElementById('user-nickname-input');
+  const nickname = input ? input.value.trim() : '';
+  
+  if (!nickname) {
+    alert('请输入昵称！');
+    return;
+  }
+  
+  // 新增：长度检查
+  if (nickname.length > 10) {
+    alert('昵称不能超过10个字符！');
+    return;
+  }
+  
+  // 新增：特殊字符检查
+  if (!/^[\u4e00-\u9fa5a-zA-Z0-9_]+$/.test(nickname)) {
+    alert('昵称只能包含中文、字母、数字和下划线！');
+    return;
+  }
+  
+  // 新增：重复昵称检查
+  const usersData = loadUsers();
+  const duplicate = Object.values(usersData.users).some(u => u.nickname === nickname);
+  if (duplicate) {
+    alert('该昵称已被使用，请选择其他昵称！');
+    return;
+  }
+  
+  const userId = addUser(nickname, selectedAvatar);
+  hideCreateUserModal();
+  
+  // 新增：成功提示
+  alert('用户创建成功！');
+  
+  // 如果这是第一个用户，自动进入
+  if (usersData.userOrder.length === 1) {
+    switchUser(userId);
+    showPage('home');
+    goHome();
+  } else {
+    renderUserSelectPage();
+  }
+}
+
 // =====================================================================
 //  数据区 —— 所有诗词数据内嵌
 // =====================================================================
@@ -465,15 +891,15 @@ let state = {
   questionIndex: 0,
   answers: [],
   selectedValue: null,
-  userPoints: parseInt(localStorage.getItem('gushici_points')||'0'),
-  userLevel: localStorage.getItem('gushici_level')||'童生',
-  badges: JSON.parse(localStorage.getItem('gushici_badges')||'[]'),
-  learnedIds: JSON.parse(localStorage.getItem('gushici_learned')||'[]'),
-  todayCount: parseInt(localStorage.getItem('gushici_today')||'0'),
-  todayDate: localStorage.getItem('gushici_today_date')||'',
-  lastStudyDate: localStorage.getItem('gushici_last_study_date')||'',  // 新增：连续学习追踪
-  streakDays: parseInt(localStorage.getItem('gushici_streak_days')||'0'),  // 新增：连续天数
-  stats: JSON.parse(localStorage.getItem('gushici_stats')||'{"challenges":0,"bestScore":0,"totalStars":0}')
+  userPoints: 0,
+  userLevel: '童生',
+  badges: [],
+  learnedIds: [],
+  todayCount: 0,
+  todayDate: '',
+  lastStudyDate: '',
+  streakDays: 0,
+  stats: {challenges:0,bestScore:0,totalStars:0}
 };
 
 const LEVELS = [
@@ -492,7 +918,7 @@ const BADGE_DEFS = [
 // =====================================================================
 //  数据初始化：把ALL_DATA转换成页面可用的诗词列表
 // =====================================================================
-let currentModuleData = []; // 当前模块的诗词列表
+let currentModuleData = [];
 function initModuleData(moduleId) {
   currentModuleData = ALL_DATA[moduleId] || [];
   return currentModuleData;
@@ -504,16 +930,12 @@ initModuleData('tang-poetry');
 // =====================================================================
 //  工具函数
 // =====================================================================
-function saveState(){
-  localStorage.setItem('gushici_points',state.userPoints);
-  localStorage.setItem('gushici_level',state.userLevel);
-  localStorage.setItem('gushici_badges',JSON.stringify(state.badges));
-  localStorage.setItem('gushici_learned',JSON.stringify(state.learnedIds));
-  localStorage.setItem('gushici_today',state.todayCount);
-  localStorage.setItem('gushici_today_date',state.todayDate);
-  localStorage.setItem('gushici_last_study_date',state.lastStudyDate);  // 新增
-  localStorage.setItem('gushici_streak_days',state.streakDays);  // 新增
-  localStorage.setItem('gushici_stats',JSON.stringify(state.stats))
+function saveState() {
+  // 保存到当前用户的数据中
+  const userId = getcurrentUserId();
+  if (userId) {
+    saveUserState(userId);
+  }
 }
 
 function checkDate(){
@@ -531,15 +953,12 @@ function updateStreak(){
   const yesterday=new Date(Date.now()-86400000).toISOString().slice(0,10);
   
   if(state.lastStudyDate===today){
-    // 今天已经更新过，不需要重复更新
     return;
   }
   
   if(state.lastStudyDate===yesterday){
-    // 昨天学习过，连续天数+1
     state.streakDays++;
   } else if(state.lastStudyDate!==today){
-    // 不是昨天也不是今天（中断了），连续天数重置为1
     state.streakDays=1;
   }
   
@@ -547,11 +966,10 @@ function updateStreak(){
   saveState();
 }
 
-// 朗读诗词 - Web Speech API（修复Bug 1：重写函数，确保逻辑清晰）
+// 朗读诗词 - Web Speech API
 let ttsSpeaking=false;
 function speakPoem(){
   if(ttsSpeaking){
-    // 正在朗读，停止
     window.speechSynthesis.cancel();
     ttsSpeaking=false;
     const btn=document.getElementById('tts-btn');
@@ -562,14 +980,12 @@ function speakPoem(){
     return;
   }
   
-  // 未朗读，开始朗读
   const item=state.currentItem;
   if(!item){
     alert('未找到诗词内容');
     return;
   }
   
-  // 检查浏览器是否支持语音合成
   if(!window.speechSynthesis){
     alert('您的浏览器不支持语音合成功能');
     return;
@@ -635,6 +1051,8 @@ function showPage(pageId){
 
 function goHome(){
   checkDate();
+  // 更新当前用户信息显示
+  updateCurrentUserDisplay();
   // 更新总进度环
   const learnedSet=new Set(state.learnedIds);
   const total = Object.values(ALL_DATA).reduce((s,v)=>s+v.length,0);
@@ -653,6 +1071,20 @@ function goHome(){
   showPage('home');
 }
 
+function updateCurrentUserDisplay() {
+  const userId = getcurrentUserId();
+  if (!userId) return;
+  
+  const usersData = loadUsers();
+  const user = usersData.users[userId];
+  if (!user) return;
+  
+  const avatarEl = document.getElementById('current-user-avatar');
+  const nameEl = document.getElementById('current-user-name');
+  if (avatarEl) avatarEl.textContent = user.avatar;
+  if (nameEl) nameEl.textContent = user.nickname;
+}
+
 function goProfile(){
   const pLevel=document.getElementById('p-level');
   if(pLevel)pLevel.textContent=state.userLevel;
@@ -664,6 +1096,18 @@ function goProfile(){
   if(pBest)pBest.textContent=state.stats.bestScore;
   const pStars=document.getElementById('p-stars');
   if(pStars)pStars.textContent=state.stats.totalStars;
+  
+  // 更新头像
+  const userId = getcurrentUserId();
+  if (userId) {
+    const usersData = loadUsers();
+    const user = usersData.users[userId];
+    if (user) {
+      const profileAvatar = document.getElementById('profile-avatar');
+      if (profileAvatar) profileAvatar.textContent = user.avatar;
+    }
+  }
+  
   // 徽章墙
   const grid=document.getElementById('badge-grid');
   if(grid){
@@ -678,12 +1122,10 @@ function goProfile(){
 
 function goList(moduleType){
   state.currentModule=moduleType;
-  // 找到当前模块的配置
   const meta=MODULES.find(m=>m.id===moduleType);
   if(!meta)return;
   const listTitle=document.getElementById('list-title');
   if(listTitle)listTitle.textContent=meta.name;
-  // 初始化当前模块的诗词数据
   initModuleData(moduleType);
   renderList();
   showPage('list');
@@ -694,23 +1136,19 @@ function goList(moduleType){
 // =====================================================================
 function goDetail(itemId){
   state.currentItemId=itemId;
-  // 从 currentModuleData 读取数据（已在 initModuleData() 中初始化）
   const item=currentModuleData.find(i=>i.id===itemId);
   if(!item)return;
   state.currentItem=item;
   const body=document.getElementById('detail-body');
   if(!body)return;
   body.innerHTML='';
-  // 诗句展示
   let html=`<div class="detail-poem"><div class="detail-poem-title">${item.title}</div>`;
   if(item.author)html+=`<div class="detail-poem-author">${item.dynasty||''} · ${item.author}</div>`;
   html+=`<div class="detail-poem-lines">`;
   
-  // 如果有拼音字段，显示拼音
   if(item.pinyin && item.pinyin.length > 0){
     (item.content||[]).forEach((line, idx)=>{
       html+=`<div class="line-with-pinyin">`;
-      // 显示拼音（如果有）
       if(item.pinyin[idx]){
         html+=`<div class="pinyin-line">${item.pinyin[idx]}</div>`;
       }
@@ -718,29 +1156,24 @@ function goDetail(itemId){
       html+=`</div>`;
     });
   } else {
-    // 没有拼音，只显示内容
     (item.content||[]).forEach(line=>{html+=`<div>${line}</div>`});
   }
   
   html+='</div></div>';
-  // 译文
   if(item.translation&&item.translation.length>0){
     html+=`<div class="detail-section"><h3>📖 诗文译文</h3>`;
     (item.translation||[]).forEach(t=>{html+=`<p>${t}</p>`});
     html+='</div>';
   }
-  // 注解
   if(item.annotation&&item.annotation.length>0){
     html+=`<div class="detail-section"><h3>📝 词语注解</h3>`;
     (item.annotation||[]).forEach(a=>{html+=`<p>${a}</p>`});
     html+='</div>';
   }
-  // 通用说明（无注解时显示）
   if(!item.annotation||item.annotation.length===0){
     html+=`<div class="detail-section"><h3>📝 诗词说明</h3><p>此诗词暂无详细注解。完成闯关后可加深对内容的理解。</p></div>`;
   }
   body.innerHTML=html;
-  // 重置朗读按钮
   ttsSpeaking=false;
   const ttsBtn=document.getElementById('tts-btn');
   if(ttsBtn){
@@ -780,7 +1213,6 @@ function renderList(){
   const container=document.getElementById('list-scroll');
   if(!container)return;
   container.innerHTML='';
-  // 使用当前模块初始化后的数据
   const items=currentModuleData;
   const currentMeta=MODULES.find(m=>m.id===state.currentModule);
   const learnedSet=new Set(state.learnedIds);
@@ -824,20 +1256,17 @@ function startChallenge(moduleType,itemId){
 function generateQuestions(item,moduleType){
   const questions=[];
   const content=item.content||[];
-  // 使用当前模块的诗词数据
   const allItems=currentModuleData;
 
-  // Q1: 选择题 - 选出句/选内容
+  // Q1: 选择题
   if(content.length>0){
     const targetIdx=Math.floor(Math.random()*content.length);
     const correct=content[targetIdx].replace(/[，。]/g,'');
-    // 确保干扰项不包含正确答案
     const otherItems=allItems.filter(i=>i.id!==item.id);
     const others=pickRandom(otherItems,3).map(i=>{
       const c=i.content[Math.floor(Math.random()*i.content.length)];
       return c.replace(/[，。]/g,'');
-    }).filter(o=>o!==correct);  // 过滤掉可能重复的选项
-    // 如果干扰项不足3个，用固定干扰项补充
+    }).filter(o=>o!==correct);
     while(others.length<3){
       others.push('未知诗句'+others.length);
     }
@@ -847,10 +1276,9 @@ function generateQuestions(item,moduleType){
 
   // Q2: 填空题
   if(content.length>=2){
-    // blankIdx 必须是 1 或更大，不能让用户补全第一句
     const blankIdx=Math.floor(Math.random()*(content.length-1))+1;
     const answer=content[blankIdx].replace(/[，。]/g,'');
-    const hint=content[blankIdx-1];  // 前一句作为提示
+    const hint=content[blankIdx-1];
     questions.push({type:'fill',question:`请补全诗句：<br><br><strong>${hint}</strong><br>＿＿＿`,answer:answer,explanation:`正确答案：「${content[blankIdx]}」`});
   }
 
@@ -859,7 +1287,6 @@ function generateQuestions(item,moduleType){
     const isReal=Math.random()>0.5;
     const realIdx=Math.floor(Math.random()*content.length);
     const realContent=content[realIdx]||'';
-    // 错误选项：从其他诗词中随机选一句
     const otherItems=allItems.filter(i=>i.id!==item.id);
     const fakeItem=otherItems.length>0?otherItems[Math.floor(Math.random()*otherItems.length)]:null;
     const fakeContent=fakeItem?(fakeItem.content||[''])[0]||'':'未知诗句';
@@ -867,19 +1294,18 @@ function generateQuestions(item,moduleType){
     questions.push({type:'truefalse',question:`判断：「${testContent}」是《${item.title}》中的内容吗？`,answer:isReal?'true':'false',explanation:isReal?`「${realContent}」是《${item.title}》中的内容。`:`「${testContent}」不是《${item.title}》中的内容。`});
   }
 
-  // Q4: 排序题（仅当有4句以上时）
+  // Q4: 排序题
   if(content.length>=3){
     const shuffled=shuffle([...content]);
     const answerArr=content.map(c=>c.replace(/[，。]/g,''));
     questions.push({type:'order',question:`请将诗句按正确顺序排列：`,items:shuffled.map(c=>c.replace(/[，。]/g,'')),answer:answerArr.join('|'),explanation:`正确顺序：<br>${content.join('<br>')}`});
   }
 
-  // Q5: 选择题2 - 补全诗句
+  // Q5: 选择题2
   if(content.length>=2){
-    const targetIdx2=Math.floor(Math.random()*(content.length-1))+1;  // 不能是第一句
+    const targetIdx2=Math.floor(Math.random()*(content.length-1))+1;
     const correct2=content[targetIdx2].replace(/[，。]/g,'');
     const hint2=content[targetIdx2-1];
-    // 确保干扰项不包含正确答案
     const otherItems=allItems.filter(i=>i.id!==item.id);
     const others2=pickRandom(otherItems,3).map(i=>{
       const c=i.content[Math.floor(Math.random()*i.content.length)];
@@ -953,19 +1379,16 @@ function renderQuestion(){
   card.innerHTML=html;
   card.dataset.explanation=q.explanation||'';
   card.classList.remove('fade-in');
-  void card.offsetWidth; // 触发重排
+  void card.offsetWidth;
   card.classList.add('fade-in');
 
-  // 排序题：确保按钮已启用（防御性检查）
   if(q.type==='order'){
     const btn2=document.getElementById('submit-btn');
     if(btn2){
       btn2.disabled=false;
-      console.log('排序题：提交按钮已启用');  // 调试信息
     }
   }
   
-  // 最终检查：确保所有题目类型的按钮状态正确
   setTimeout(()=>{
     const finalBtn=document.getElementById('submit-btn');
     if(finalBtn && q.type==='order'){
@@ -1015,37 +1438,32 @@ function selectTF(val){
 // 拖拽排序
 let oDragIdx=-1;
 function oDragStart(e,idx){
-  oDragIdx=idx;  // 保存原始顺序索引
+  oDragIdx=idx;
   e.dataTransfer.effectAllowed='move';
-  e.dataTransfer.setData('text/plain','');  // Firefox 需要
+  e.dataTransfer.setData('text/plain','');
 }
 function oDragOver(e){
   e.preventDefault();
   e.dataTransfer.dropEffect='move';
 }
 function oDrop(e,targetIdx){
-  // targetIdx 是拖拽目标在当前显示顺序中的索引
   e.preventDefault();
   if(oDragIdx===-1)return;
   
   const area=document.getElementById('order-area');
   if(!area)return;
   
-  // 获取当前显示顺序的元素列表
   const children=Array.from(area.children);
   const items=children.map(el=>({
     text:el.querySelector('span:last-child').textContent,
     idx:parseInt(el.dataset.idx)
   }));
   
-  // 找到拖拽源在当前显示顺序中的位置
   const srcPos=items.findIndex(it=>it.idx===oDragIdx);
   if(srcPos===-1||srcPos===targetIdx)return;
   
-  // 交换元素
   [items[srcPos],items[targetIdx]]=[items[targetIdx],items[srcPos]];
   
-  // 重新渲染
   area.innerHTML='';
   items.forEach((it,i)=>{
     const div=document.createElement('div');
@@ -1073,7 +1491,6 @@ function handleSubmit(){
   if(q.type==='choice'){
     if(state.selectedValue===null)return;
     isCorrect=(q.options[state.selectedValue]===q.answer);
-    // 显示对错
     document.querySelectorAll('.option-btn').forEach((b,i)=>{
       if(i===state.selectedValue) b.classList.add(isCorrect?'correct':'wrong');
       if(i!==state.selectedValue&&q.options[i]===q.answer) b.classList.add('correct');
@@ -1087,7 +1504,6 @@ function handleSubmit(){
       input.style.background=isCorrect?'#e8f5e9':'#fde8e8';
       input.disabled=true;
     }
-    // 调试信息（正式版可删除）
     if(!isCorrect){
       console.log('填空判错：输入='+norm(val)+' | 答案='+norm(q.answer));
     }
@@ -1108,12 +1524,11 @@ function handleSubmit(){
   state.answers.push({isCorrect});
   const submitBtn=document.getElementById('submit-btn');
   if(submitBtn){
-    submitBtn.disabled=false;  // 启用按钮，允许点击"下一题"
+    submitBtn.disabled=false;
     submitBtn.textContent=state.questionIndex<state.questions.length-1?'下一题 →':'查看结果';
     submitBtn.onclick=nextQuestion;
   }
 
-  // 显示解释
   if(card){
     card.innerHTML+=`<div style="margin-top:16px;padding:12px;background:${isCorrect?'#e8f5e9':'#fde8e8'};border-radius:8px;font-size:14px">${isCorrect?'✅ 回答正确！':'❌ 回答错误。'}${card.dataset.explanation?'<br><br>📖 '+card.dataset.explanation:''}</div>`;
   }
@@ -1126,16 +1541,14 @@ function nextQuestion(){
       showResultPage();
       return;
     }
-    // 重新渲染下一题（renderQuestion会自动处理按钮状态）
     renderQuestion();
-    // 注意：不要在这里重置按钮状态，因为renderQuestion()已经处理了
   }catch(e){
     alert('切换下一题时出错：'+e.message);
   }
 }
 
 // =====================================================================
-//  结果页（修复Bug 3和Bug 4）
+//  结果页
 // =====================================================================
 function showResultPage(){
   const correct=state.answers.filter(a=>a.isCorrect).length;
@@ -1152,24 +1565,21 @@ function showResultPage(){
 
   // 统计
   checkDate();
-  updateStreak();  // 新增：更新连续学习天数
+  updateStreak();
   state.stats.challenges++;
   state.stats.bestScore=Math.max(state.stats.bestScore,score);
   state.stats.totalStars+=stars;
-  // 今日学习计数
   state.todayCount++;
-  // 已学去重
   if(!state.learnedIds.includes(state.currentItemId)){
     state.learnedIds.push(state.currentItemId);
   }
 
-  // 徽章（修复Bug 3：学富五车需要 >= 50）
+  // 徽章
   let newBadge=null;
   if(state.stats.challenges===1&&!state.badges.includes('b001')){
     state.badges.push('b001');
     newBadge='b001';
   }
-  // Bug 3 修复：学富五车 - 累计学习50首
   if(state.learnedIds.length>=50&&!state.badges.includes('b002')){
     state.badges.push('b002');
     newBadge='b002';
@@ -1178,7 +1588,6 @@ function showResultPage(){
     state.badges.push('b003');
     newBadge='b003';
   }
-  // Bug 4 修复：持之以恒 - 连续学习7天
   if(state.streakDays>=7&&!state.badges.includes('b004')){
     state.badges.push('b004');
     newBadge='b004';
@@ -1261,33 +1670,54 @@ function confirmLeave(){
 // =====================================================================
 function resetAllData(){
   if(!confirm('确定要重置所有学习数据吗？此操作不可撤销。'))return;
-  localStorage.removeItem('gushici_points');
-  localStorage.removeItem('gushici_level');
-  localStorage.removeItem('gushici_badges');
-  localStorage.removeItem('gushici_learned');
-  localStorage.removeItem('gushici_today');
-  localStorage.removeItem('gushici_today_date');
-  localStorage.removeItem('gushici_last_study_date');  // 新增
-  localStorage.removeItem('gushici_streak_days');  // 新增
-  localStorage.removeItem('gushici_stats');
+  
+  const userId = getcurrentUserId();
+  if (!userId) {
+    alert('未找到当前用户！');
+    return;
+  }
+  
+  // 只重置当前用户的数据
   state.userPoints=0;
   state.userLevel='童生';
   state.badges=[];
   state.learnedIds=[];
   state.todayCount=0;
   state.todayDate='';
-  state.lastStudyDate='';  // 新增
-  state.streakDays=0;  // 新增
+  state.lastStudyDate='';
+  state.streakDays=0;
   state.stats={challenges:0,bestScore:0,totalStars:0};
+  
+  saveState();
   alert('数据已重置！');
   goHome();
 }
 
 // =====================================================================
-//  启动（修复Bug 2：确保checkDate被调用）
+//  启动
 // =====================================================================
-checkDate();  // Bug 2 修复：页面加载时立即检查日期
-renderHome();
+function initApp() {
+  // 初始化用户系统
+  initializeUsers();
+  
+  // 检查是否有当前用户
+  const userId = getcurrentUserId();
+  const usersData = loadUsers();
+  
+  if (userId && usersData.users[userId]) {
+    // 已登录，加载用户数据
+    loadUserState(userId);
+    showPage('home');
+    renderHome();
+  } else {
+    // 未登录，显示用户选择页
+    renderUserSelectPage();
+    showPage('user-select');
+  }
+}
+
+// 启动应用
+initApp();
 </script>
 </body>
 </html>
