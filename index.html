@@ -217,6 +217,8 @@ body{font-family:-apple-system,"Segoe UI",sans-serif;background:#F5F0E8;color:#3
 </style>
 </head>
 <body>
+  <!-- 调试提示：如果 3 秒后还显示，说明 JS 没执行 -->
+  <div id="debug-loading" style="position:fixed;top:0;left:0;right:0;background:#e74c3c;color:#fff;padding:8px;text-align:center;font-size:13px;z-index:99999;">⏳ 正在加载应用...</div>
 <div class="app" id="app">
 
   <!-- ========== 用户选择页 ========== -->
@@ -1012,10 +1014,10 @@ function filterItemsByKeyword(items) {
 }
 
 const MODULE_META = {
-  "tang-poetry":     {name:"唐诗三百首",icon:"📜",color:"#E74C3C",desc:"经典唐诗，闯关记忆",count:50},
+  "tang-poetry":     {name:"唐诗三百首",icon:"📜",color:"#E74C3C",desc:"经典唐诗，闯关记忆",count:100},
   "shenglv-qimeng":  {name:"声律启蒙",icon:"🎵",color:"#3498DB",desc:"对联韵律，感受声韵",count:10},
   "qianzi-wen":      {name:"千字文",icon:"📖",color:"#2ECC71",desc:"千字韵文，识字知理",count:32},
-  "sanzijing":       {name:"三字经",icon:"📗",color:"#F39C12",desc:"三字韵语，启蒙经典",count:8},
+  "sanzi-jing":      {name:"三字经",icon:"📗",color:"#F39C12",desc:"三字韵语，启蒙经典",count:8},
   "dizigui":         {name:"弟子规",icon:"📙",color:"#9B59B6",desc:"行为规范，立德树人",count:20},
   "baijia-xing":     {name:"百家姓",icon:"🔤",color:"#E67E22",desc:"百家姓氏，认祖归宗",count:10}
 };
@@ -1065,7 +1067,7 @@ function initModuleData(moduleId) {
 }
 
 // 页面加载时默认初始化唐诗模块的数据
-initModuleData('tang-poetry');
+// initModuleData('tang-poetry'); // 移到 initApp() 里，确保 ALL_DATA 已解析完
 
 // =====================================================================
 //  工具函数
@@ -1108,6 +1110,13 @@ function updateStreak(){
 
 // 朗读诗词 - Web Speech API
 let ttsSpeaking=false;
+let isTTSSupported=false; // 浏览器是否支持语音合成
+
+// 检测浏览器是否支持语音合成
+function checkTTSSupport(){
+  isTTSSupported=!!(window.speechSynthesis && window.SpeechSynthesisUtterance);
+  return isTTSSupported;
+}
 function speakPoem(){
   if(ttsSpeaking){
     window.speechSynthesis.cancel();
@@ -1126,8 +1135,7 @@ function speakPoem(){
     return;
   }
   
-  if(!window.speechSynthesis){
-    alert('您的浏览器不支持语音合成功能');
+  if(!window.speechSynthesis || !isTTSSupported){
     return;
   }
   
@@ -1321,6 +1329,14 @@ function goDetail(itemId){
     ttsBtn.classList.remove('speaking');
   }
   showPage('detail');
+  
+  // 如果不支持语音合成，隐藏朗读按钮
+  if(!isTTSSupported){
+    setTimeout(()=>{
+      const btn=document.getElementById('tts-btn');
+      if(btn)btn.style.display='none';
+    }, 50);
+  }
 }
 
 // =====================================================================
@@ -1330,7 +1346,10 @@ function renderHome(){
   const grid=document.getElementById('module-grid');
   if(!grid)return;
   grid.innerHTML='';
-  Object.entries(MODULE_META).forEach(([key,meta])=>{
+  // 兼容旧浏览器：不用 Object.entries()
+  for (const key in MODULE_META) {
+    if (!MODULE_META.hasOwnProperty(key)) continue;
+    const meta = MODULE_META[key];
     const card=document.createElement('div');
     card.className='module-card';
     card.style.borderTopColor=meta.color;
@@ -1342,7 +1361,7 @@ function renderHome(){
       <div class="module-count">${ALL_DATA[key]?ALL_DATA[key].length:0} 篇</div>
     `;
     grid.appendChild(card);
-  });
+  }
   goHome();
 }
 
@@ -1853,8 +1872,15 @@ function resetAllData(){
 //  启动
 // =====================================================================
 function initApp() {
+  // 隐藏调试提示（说明 JS 已执行）
+  const dbg = document.getElementById('debug-loading');
+  if(dbg) dbg.style.display='none';
+  
   // 初始化用户系统
   initializeUsers();
+  
+  // 检测语音合成支持
+  checkTTSSupport();
   
   // 检查是否有当前用户
   const userId = getcurrentUserId();
@@ -1872,8 +1898,31 @@ function initApp() {
   }
 }
 
-// 启动应用
-initApp();
+// 全局错误捕获（方便手机调试）
+window.onerror = function(msg, url, line, col, err) {
+  const errMsg = 'JS错误: ' + msg + ' (行:' + line + ')';
+  // 尝试显示错误
+  const home = document.getElementById('page-home');
+  if (home) {
+    let errDiv = document.getElementById('error-msg');
+    if (!errDiv) {
+      errDiv = document.createElement('div');
+      errDiv.id = 'error-msg';
+      errDiv.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#e74c3c;color:#fff;padding:8px;font-size:12px;z-index:9999;';
+      document.body.appendChild(errDiv);
+    }
+    errDiv.textContent = errMsg;
+  }
+  return false;
+};
+
+// 启动应用（确保 DOM 就绪）
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initApp);
+} else {
+  // DOM 已就绪，延迟一点确保脚本完全解析完
+  setTimeout(initApp, 50);
+}
 </script>
 </body>
 </html>
