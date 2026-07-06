@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>古诗词学习 - 完整版</title>
-<!-- 加载外部唐诗数据（如果存在）-->
-<script src="data/tang_poetry_300.js"></script>
+<!-- 加载外部唐诗数据（如果存在，使用 defer 避免阻塞页面渲染）-->
+<script src="data/tang_poetry_300.js" defer></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:-apple-system,"Segoe UI",sans-serif;background:#F5F0E8;color:#333;min-height:100vh}
@@ -2034,42 +2034,68 @@ function resetAllData(){
 //  启动
 // =====================================================================
 function initApp() {
-  // 隐藏调试提示（说明 JS 已执行）
-  const dbg = document.getElementById('debug-loading');
-  if(dbg) dbg.style.display='none';
-  
-  // 初始化用户系统
-  initializeUsers();
-  
-  // 检测语音合成支持
-  checkTTSSupport();
-  
-  // 加载外部唐诗数据（如果可用）
-  if (typeof TANG_POETRY_300 !== 'undefined') {
-    ALL_DATA["tang-poetry"] = TANG_POETRY_300;
-    console.log("✓ 已加载外部唐诗数据：" + TANG_POETRY_300.length + "首");
-  } else {
-    // 使用内联数据
-    ALL_DATA["tang-poetry"] = TANG_POETRY_INLINE || [];
-    console.log("⚠ 使用内联唐诗数据：" + ALL_DATA["tang-poetry"].length + "首");
-  }
-  
-  // 初始化唐诗模块数据
-  initModuleData('tang-poetry');
-  
-  // 检查是否有当前用户
-  const userId = getcurrentUserId();
-  const usersData = loadUsers();
-  
-  if (userId && usersData.users[userId]) {
-    // 已登录，加载用户数据
-    loadUserState(userId);
-    showPage('home');
-    renderHome();
-  } else {
-    // 未登录，显示用户选择页
-    renderUserSelectPage();
-    showPage('user-select');
+  try {
+    // 隐藏调试提示（说明 JS 已执行）
+    const dbg = document.getElementById('debug-loading');
+    if(dbg) dbg.style.display='none';
+    
+    console.log('🚀 开始初始化应用...');
+    
+    // 初始化用户系统
+    initializeUsers();
+    
+    // 检测语音合成支持
+    checkTTSSupport();
+    
+    // 加载外部唐诗数据（如果可用）
+    if (typeof TANG_POETRY_300 !== 'undefined') {
+      ALL_DATA["tang-poetry"] = TANG_POETRY_300;
+      console.log("✓ 已加载外部唐诗数据：" + TANG_POETRY_300.length + "首");
+    } else {
+      // 使用内联数据
+      ALL_DATA["tang-poetry"] = TANG_POETRY_INLINE || [];
+      console.log("⚠ 使用内联唐诗数据：" + ALL_DATA["tang-poetry"].length + "首");
+    }
+    
+    // 检查数据是否成功加载
+    if (!ALL_DATA["tang-poetry"] || ALL_DATA["tang-poetry"].length === 0) {
+      console.error('❌ 唐诗数据为空！页面可能无法正常显示');
+    }
+    
+    // 初始化唐诗模块数据
+    initModuleData('tang-poetry');
+    
+    // 检查是否有当前用户
+    const userId = getcurrentUserId();
+    const usersData = loadUsers();
+    
+    console.log('📱 当前用户ID:', userId);
+    
+    if (userId && usersData.users[userId]) {
+      // 已登录，加载用户数据
+      console.log('✓ 已登录用户:', usersData.users[userId].nickname);
+      loadUserState(userId);
+      showPage('home');
+      renderHome();
+      console.log('🏠 已显示首页');
+    } else {
+      // 未登录，显示用户选择页
+      console.log('⚠ 未登录，显示用户选择页');
+      renderUserSelectPage();
+      showPage('user-select');
+    }
+  } catch (e) {
+    console.error('❌ 初始化应用时出错:', e);
+    // 显示错误信息
+    const errMsg = '初始化错误: ' + e.message;
+    let errDiv = document.getElementById('error-msg');
+    if (!errDiv) {
+      errDiv = document.createElement('div');
+      errDiv.id = 'error-msg';
+      errDiv.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#e74c3c;color:#fff;padding:12px;font-size:13px;z-index:9999;text-align:center;';
+      document.body.appendChild(errDiv);
+    }
+    errDiv.textContent = errMsg;
   }
 }
 
@@ -2091,13 +2117,28 @@ window.onerror = function(msg, url, line, col, err) {
   return false;
 };
 
-// 启动应用（确保 DOM 就绪）
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', initApp);
-} else {
-  // DOM 已就绪，延迟一点确保脚本完全解析完
-  setTimeout(initApp, 50);
+// 启动应用（确保 DOM 和所有脚本都就绪）
+function startAppWhenReady() {
+  console.log('📦 DOM 状态:', document.readyState);
+  console.log('🔍 检查 TANG_POETRY_300:', typeof TANG_POETRY_300);
+  
+  // 如果 DOM 还没就绪，等待
+  if (document.readyState === 'loading') {
+    console.log('⏳ 等待 DOM 就绪...');
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('✅ DOM 已就绪，延迟启动...');
+      // 延迟 500ms 确保所有脚本解析完成（尤其是移动浏览器）
+      setTimeout(initApp, 500);
+    });
+  } else {
+    console.log('✅ DOM 已就绪，延迟启动...');
+    // DOM 已就绪，延迟 500ms 确保脚本完全解析完
+    setTimeout(initApp, 500);
+  }
 }
+
+// 启动应用
+startAppWhenReady();
 </script>
 </body>
 </html>
